@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Simple Personal Dictionary</string>
+
+    <string name="action_about">About</string>
+    <string name="action_rate">Rate App</string>
+    <string name="action_save">Export to Excel &amp; CSV</string>
+
+    <string name="about_title_simplepersonaldictionary">Simple Personal Dictionary</string>
+    <string name="about_simplepersonaldictionary">This mobile application designed and coded by Emre Baran. Some icons and graphs have CC-BY License. Some of them are free for personal and commercial use. And a few of them are designed by me.</string>
+    <string name="about_title_special_thanks">Special Thanks</string>
+    <string name="about_special_thanks">Chris Leversuch : Thank you for alphabet scroller.</string>
+    <string name="about_title_application">About Application</string>
+    <string name="about_application">This application is open-source software. You can find the source codes on GitHub: mree58 \nFeel free to contact if you have any ideas or problems with application. Mail: emrebaran.ceng@gmail.com</string>
+    <string name="about_title_permissions">About Permissions</string>
+    <string name="about_permissions">WAKE_LOCK: for alarm, let you inform about incoming birthdays</string>
+    <string name="about_application_version">Application Version:</string>
+    <string name="about_supported_languages">Supported Languages:</string>
+
+    <string name="app_exit">Press Again To Exit</string>
+
+    <string name="popup_edt_word">Word</string>
+    <string name="popup_edt_explanation">Explanation</string>
+
+    <string name="warning_word">Word cannot be blank !</string>
+    <string name="warning_explanation">Explanation cannot be blank !</string>
+
+    <string name="export_db">Exporting database ... !</string>
+    <string name="export_succees_csv">Export CSV succeed !</string>
+    <string name="export_fail_csv">Export CSV failed !</string>
+    <string name="export_succees_xls">Export Excel succeed !</string>
+    <string name="export_fail_xls">Export Excel failed !</string>
+    <string name="export_sheet">Sheet1 !</string>
+
+</resources>

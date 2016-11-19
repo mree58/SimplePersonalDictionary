@@ -1,0 +1,68 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:background="@color/green1"
+	android:id="@+id/popup">
+
+
+	<android.support.design.widget.TextInputLayout
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/dimen_add_new_sizes">
+
+		<EditText
+			android:id="@+id/popup_edt_word"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:ems="10"
+			android:hint="@string/popup_edt_word" >
+
+			<requestFocus />
+		</EditText>
+
+
+	</android.support.design.widget.TextInputLayout>
+
+
+	<android.support.design.widget.TextInputLayout
+		android:layout_width="match_parent"
+		android:layout_height="100dp">
+
+		<EditText
+			android:id="@+id/popup_edt_explanation"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="textMultiLine"
+			android:ems="10"
+			android:layout_weight="1"
+			android:hint="@string/popup_edt_explanation"
+			/>
+
+	</android.support.design.widget.TextInputLayout>
+
+
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/popup_btn_close"
+			android:src="@drawable/ic_close_black_24dp"
+			android:tint="@color/white"
+			android:theme="@style/MyButton"
+			android:layout_weight="1" />
+
+		<ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/popup_btn_save"
+			android:src="@drawable/ic_check_black_24dp"
+			android:tint="@color/white"
+			android:theme="@style/MyButton"
+			android:layout_weight="1" />
+	</LinearLayout>
+
+</LinearLayout>
