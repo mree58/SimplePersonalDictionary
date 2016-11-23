@@ -28,8 +28,6 @@ public class WordsClass {
     }
 
 
-
-
     public int getID(){
         return this._id;
     }

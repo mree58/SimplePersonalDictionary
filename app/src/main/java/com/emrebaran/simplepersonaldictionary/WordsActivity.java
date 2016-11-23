@@ -1,17 +1,22 @@
 package com.emrebaran.simplepersonaldictionary;
 
 import android.app.Activity;
-import android.app.ListActivity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -62,22 +67,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+
 /**
  * Created by mree on 10.11.2016.
  */
 
-public class WordsActivity extends ListActivity {
-
-    ListView listPeoples, listPeoplesHeader;
+public class WordsActivity extends AppCompatActivity {//ListActivity {
 
     DisplayMetrics metrics;
 
     Integer[] array_ids;
     String[] array_words;
     String[] array_explanations;
-
-
-    String[] array_empty = {};
 
     WordsDB db= new WordsDB(this);
 
@@ -92,16 +93,17 @@ public class WordsActivity extends ListActivity {
     private static float sideIndexY;
     private int indexListSize;
 
-    List<String> countries;
+    List<String> words;
 
     Locale locale = Locale.getDefault();
 
     private boolean doubleBackToExitPressedOnce;
     private Handler mHandler = new Handler();
 
-  //  int controlSectionId[];
 
     List<Integer> controlSectionId;
+
+    ListView lv;
 
     class SideIndexGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
@@ -118,22 +120,20 @@ public class WordsActivity extends ListActivity {
     }
 
 
-
-
-
+    //for not clicking the section
     public boolean contains(final List<Integer> array, final int key) {
 
         return array.contains(key);
 
     }
 
+    //for getting real position of item -> all - section = real pos
     public int containse(final List<Integer> array, final int pos) {
 
         int i =0;
 
         while(i<=pos){
 
-           // Log.d("array[i]", String.valueOf(array.get(i)));
             Log.d("i", String.valueOf(i));
             Log.d("pos", String.valueOf(pos));
 
@@ -141,12 +141,10 @@ public class WordsActivity extends ListActivity {
             i++;
 
             if(i>=array.size()) break;
-
             if(array.get(i)>=pos) break;
 
 
         }
-
 
         Log.d("containse", String.valueOf(i));
 
@@ -167,129 +165,18 @@ public class WordsActivity extends ListActivity {
         display.getMetrics(metrics);
 
 
-
-        ListView lv = getListView();
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if(!contains(controlSectionId,position))
-                    Toast.makeText(getApplicationContext(),"Long: "+countries.get(position-containse(controlSectionId,position)),Toast.LENGTH_SHORT).show();
-
-
-                return true;
-            }
-        });
-
-
-        ListView lv2 = getListView();
-        lv2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv = (ListView)findViewById(R.id.list);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(!contains(controlSectionId,position))
-                    Toast.makeText(getApplicationContext(),"Short: "+countries.get(position-containse(controlSectionId,position)),Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-
-      /*   listPeoples.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-
-               final Dialog infoDialog = new Dialog(WordsActivity.this);
-                infoDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                infoDialog.setContentView(R.layout.layout_popup_delete);
-
-
-                infoDialog.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-
-                ImageButton cancelAlarm = (ImageButton) infoDialog.findViewById(R.id.popup_btn_cancel_alarm);
-                cancelAlarm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        cancelExactAlarm(array_ids[position]);
-                        infoDialog.dismiss();
-                        Toast.makeText(getApplicationContext(), getString(R.string.alarm_cancelled), Toast.LENGTH_SHORT).show();
-
-
-                    }
-                });
-
-                ImageButton setAlarm = (ImageButton) infoDialog.findViewById(R.id.popup_btn_set_alarm);
-                setAlarm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        final TimePickerDialog.OnTimeSetListener timePickerListener = new TimePickerDialog.OnTimeSetListener() {
-                            public void onTimeSet(TimePicker view, int _hour, int _minute) {
-                                    hour = _hour;
-                                    minute = _minute;
-                                    setAlarm(array_birthdates[position],hour+":"+minute,array_ids[position]);
-                                    infoDialog.dismiss();
-
-                            }
-                        };
-
-
-                        final TimePickerDialog timePickerDialog = new TimePickerDialog(
-                                WordsActivity.this, timePickerListener,
-                                hour, minute,true);
-
-
-                        timePickerDialog.show();
-
-
-                    }
-                });
-
-
-                ImageButton deletePerson = (ImageButton) infoDialog.findViewById(R.id.popup_btn_delete);
-                deletePerson.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        AlertDialog.Builder newDialog = new AlertDialog.Builder(WordsActivity.this);
-                        newDialog.setMessage(getString(R.string.delete_person));
-                        newDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int which){
-                                db.deletePeople(array_ids[position]);
-                                cancelExactAlarm(array_ids[position]);
-                                load();
-                                dialog.dismiss();
-                                infoDialog.dismiss();
-
-                            }
-                        });
-                        newDialog.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener(){
-                            public void onClick(DialogInterface dialog, int which){
-                                dialog.cancel();
-                            }
-                        });
-                        newDialog.show();
-
-
-                    }
-                });
-
-                infoDialog.show();
-
-
+                    //Toast.makeText(getApplicationContext(),"Short: "+countries.get(position-containse(controlSectionId,position)),Toast.LENGTH_SHORT).show();
+                    showPopupEdit(WordsActivity.this,words.get(position-containse(controlSectionId,position)),position-containse(controlSectionId,position));
 
             }
         });
 
-        listPeoples.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                return true;
-
-            }
-        });*/
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -330,125 +217,132 @@ public class WordsActivity extends ListActivity {
                 array_explanations[i] = p.getExplanation();
             }
 
-
             refresh(j);
 
-            //  AlphabetListAdapter adapter = new AlphabetListAdapter(array_names);
-            //  listPeoples.setAdapter(adapter);
         }
         else
         {
-
-            //  AlphabetListAdapter adapter = new AlphabetListAdapter(array_empty);
-            //   listPeoples.setAdapter(adapter);
+            refresh(0);
         }
     }
 
 
     private void refresh(int j) {
 
-        countries = new ArrayList<String>();
+        words = new ArrayList<String>();
 
         if(array_words.length>0) {
             int i = array_words.length;
             Log.d("len",String.valueOf(i));
             for (; i > 0; i--) {
-                countries.add(array_words[i-1]);
+                words.add(array_words[i-1]);
             }
         }
 
 
-        Collator coll = Collator.getInstance(locale);
-        coll.setStrength(Collator.PRIMARY);
-        Collections.sort(countries, coll);
+        if(j==0) {
+
+            List<Row> rows = new ArrayList<Row>();
+            adapter.setRows(rows);
+            lv.setAdapter(adapter);
+
+            alphabet = new ArrayList<Object[]>();
+
+            updateList();
+
+        }
+        else {
 
 
-        List<Row> rows = new ArrayList<Row>();
-        int start = 0;
-        int end = 0;
-        String previousLetter = null;
-        Object[] tmpIndexItem = null;
-        Pattern numberPattern = Pattern.compile("[0-9]");
-
-        //controlSectionId = new int[j];
-
-        controlSectionId = new ArrayList<Integer>();
-
-        int controlId=0;
-        int control=0;
-
-        alphabet = new ArrayList<Object[]>();
-
-        for (String country : countries) {
-            String firstLetter = country.substring(0, 1);
+            Collator coll = Collator.getInstance(locale);
+            coll.setStrength(Collator.PRIMARY);
+            Collections.sort(words, coll);
 
 
+            List<Row> rows = new ArrayList<Row>();
+            int start = 0;
+            int end = 0;
+            String previousLetter = null;
+            Object[] tmpIndexItem = null;
+            Pattern numberPattern = Pattern.compile("[0-9]");
 
-            // Group numbers together in the scroller
-            if (numberPattern.matcher(firstLetter).matches()) {
-                firstLetter = "#";
+            controlSectionId = new ArrayList<Integer>();
+
+            int controlId = 0;
+            int control = 0;
+
+            alphabet = new ArrayList<Object[]>();
+
+            for (String word : words) {
+                String firstLetter = word.substring(0, 1);
+
+
+                // Group numbers together in the scroller
+                if (numberPattern.matcher(firstLetter).matches()) {
+                    firstLetter = "#";
+                }
+
+                // If we've changed to a new letter, add the previous letter to the alphabet scroller
+                if (previousLetter != null && !firstLetter.equals(previousLetter)) {
+                    end = rows.size() - 1;
+                    tmpIndexItem = new Object[3];
+                    // tmpIndexItem[0] = previousLetter.toUpperCase(Locale.getDefault());
+                    tmpIndexItem[0] = previousLetter.toUpperCase(locale);
+                    tmpIndexItem[1] = start;
+                    tmpIndexItem[2] = end;
+                    alphabet.add(tmpIndexItem);
+
+                    Log.d("alphabet", String.valueOf(tmpIndexItem[0]));
+
+                    start = end + 1;
+                }
+
+                // Check if we need to add a header row
+                if (!firstLetter.equals(previousLetter)) {
+                    rows.add(new Section(firstLetter));
+                    sections.put(firstLetter, start);
+
+                    controlSectionId.add(control + controlId);
+
+                    //controlSectionId[controlId]=control+controlId;
+
+                    Log.d("controlId", String.valueOf(controlId));
+
+                    Log.d("controlSectionId", String.valueOf(control + controlId));
+                    Log.d("control", String.valueOf(control));
+
+                    controlId++;
+
+                }
+
+                // Add the country to the list
+                rows.add(new Item(word));
+                previousLetter = firstLetter;
+
+                control++;
+
             }
 
-            // If we've changed to a new letter, add the previous letter to the alphabet scroller
-            if (previousLetter != null && !firstLetter.equals(previousLetter)) {
-                end = rows.size() - 1;
+            if (previousLetter != null) {
+                // Save the last letter
                 tmpIndexItem = new Object[3];
-                // tmpIndexItem[0] = previousLetter.toUpperCase(Locale.getDefault());
                 tmpIndexItem[0] = previousLetter.toUpperCase(locale);
                 tmpIndexItem[1] = start;
-                tmpIndexItem[2] = end;
+                tmpIndexItem[2] = rows.size() - 1;
                 alphabet.add(tmpIndexItem);
 
-                Log.d("alphabet",String.valueOf(tmpIndexItem[0]));
-
-                start = end + 1;
-            }
-
-            // Check if we need to add a header row
-            if (!firstLetter.equals(previousLetter)) {
-                rows.add(new Section(firstLetter));
-                sections.put(firstLetter, start);
-
-                controlSectionId.add(control+controlId);
-
-                //controlSectionId[controlId]=control+controlId;
-
-                Log.d("controlId",String.valueOf(controlId));
-
-                Log.d("controlSectionId",String.valueOf(control+controlId));
-                Log.d("control",String.valueOf(control));
-
-                controlId++;
+                Log.d("alphabet2", String.valueOf(tmpIndexItem[0]));
 
             }
 
-            // Add the country to the list
-            rows.add(new Item(country));
-            previousLetter = firstLetter;
 
-            control++;
+            Log.d("row", String.valueOf(rows.size()));
 
+            adapter.setRows(rows);
+            lv.setAdapter(adapter);
+
+            updateList();
         }
-
-      if (previousLetter != null) {
-            // Save the last letter
-            tmpIndexItem = new Object[3];
-            tmpIndexItem[0] = previousLetter.toUpperCase(locale);
-            tmpIndexItem[1] = start;
-            tmpIndexItem[2] = rows.size() - 1;
-            alphabet.add(tmpIndexItem);
-
-          Log.d("alphabet2",String.valueOf(tmpIndexItem[0]));
-
-      }
-
-
-        Log.d("row",String.valueOf(rows.size()));
-
-        adapter.setRows(rows);
-        setListAdapter(adapter);
-
-        updateList();
     }
 
 
@@ -470,6 +364,8 @@ public class WordsActivity extends ListActivity {
         Log.d("alphabet size",String.valueOf(alphabet.size()));
 
         if (indexListSize < 1) {
+
+            displayListItem();
             return;
         }
 
@@ -531,7 +427,7 @@ public class WordsActivity extends ListActivity {
             int subitemPosition = sections.get(indexItem[0]);
 
             //ListView listView = (ListView) findViewById(android.R.id.list);
-            getListView().setSelection(subitemPosition);
+            lv.setSelection(subitemPosition);
 
         }
     }
@@ -606,6 +502,150 @@ public class WordsActivity extends ListActivity {
         }
     }
 
+
+    private PopupWindow pwe;
+    private void showPopupEdit(final Activity context, String selectedWord, final int selectedNo) {
+        try {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View layout = inflater.inflate(R.layout.layout_popup_edit, (ViewGroup) findViewById(R.id.popup));
+
+            float popupWidth = 350*metrics.scaledDensity;
+            float popupHeight = 200*metrics.scaledDensity;
+
+            pwe = new PopupWindow(context);
+            pwe.setContentView(layout);
+            pwe.setWidth((int)popupWidth);
+            pwe.setHeight((int)popupHeight);
+            pwe.setFocusable(true);
+
+            Point p = new Point();
+            p.x = 50;
+            p.y = 50;
+
+            int OFFSET_X = -50;
+            int OFFSET_Y = (int)(90*metrics.scaledDensity);
+
+
+            pwe.showAtLocation(layout, Gravity.TOP, p.x + OFFSET_X, p.y + OFFSET_Y);
+
+
+            final TextView txtWord= (TextView) layout.findViewById(R.id.popup_txt_word);
+            final EditText edtExplanation= (EditText) layout.findViewById(R.id.popup_edt_explanation);
+
+            txtWord.setText(selectedWord);
+            edtExplanation.setText(array_explanations[selectedNo]);
+
+
+            ImageButton close= (ImageButton) layout.findViewById(R.id.popup_btn_close);
+            close.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pwe.dismiss();
+
+                }
+            });
+
+            ImageButton update= (ImageButton) layout.findViewById(R.id.popup_btn_update);
+            update.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if(edtExplanation.getText().toString().length()<1)
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.warning_explanation),Toast.LENGTH_SHORT).show();
+                    else
+                    {
+
+                        AlertDialog.Builder newDialog = new AlertDialog.Builder(WordsActivity.this);
+                        newDialog.setMessage(getString(R.string.update_word));
+                        newDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which){
+                                long inserted_id;
+                                inserted_id = db.updateWord(array_ids[selectedNo],edtExplanation.getText().toString());
+                                if(inserted_id!=0) {
+                                    Toast.makeText(getApplicationContext(), getString(R.string.update_word_succeded), Toast.LENGTH_SHORT).show();
+
+                                    pwe.dismiss();
+                                    load();
+                                }
+                                else
+                                    Toast.makeText(getApplicationContext(),getString(R.string.update_word_failed),Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        newDialog.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int which){
+                                dialog.cancel();
+                            }
+                        });
+                        newDialog.show();
+
+                    }
+                }
+            });
+
+
+            ImageButton delete= (ImageButton) layout.findViewById(R.id.popup_btn_delete);
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    AlertDialog.Builder newDialog = new AlertDialog.Builder(WordsActivity.this);
+                    newDialog.setMessage(getString(R.string.delete_word));
+                    newDialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int which){
+                            db.deleteWord(array_ids[selectedNo]);
+                            load();
+                            dialog.dismiss();
+                            pwe.dismiss();
+                        }
+                    });
+                    newDialog.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int which){
+                            dialog.cancel();
+                        }
+                    });
+                    newDialog.show();
+
+
+
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private PopupWindow pwa;
+    private void showPopupAbout(final Activity context) {
+        try {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = inflater.inflate(R.layout.layout_about, (ViewGroup) findViewById(R.id.popup_1));
+
+            float popupWidth = 330*metrics.scaledDensity;
+            float popupHeight = 440*metrics.scaledDensity;
+
+            pwa = new PopupWindow(context);
+            pwa.setContentView(layout);
+            pwa.setWidth((int)popupWidth);
+            pwa.setHeight((int)popupHeight);
+            pwa.setFocusable(true);
+
+            Point p = new Point();
+            p.x = 50;
+            p.y = 50;
+
+            int OFFSET_X = -50;
+            int OFFSET_Y = (int)(80*metrics.scaledDensity);
+
+
+            pwa.showAtLocation(layout, Gravity.TOP, p.x + OFFSET_X, p.y + OFFSET_Y);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public class ExportDatabaseCSVTask extends AsyncTask<String, Void, Boolean>
@@ -798,36 +838,7 @@ public class WordsActivity extends ListActivity {
     }
 
 
-    private PopupWindow pwa;
-    private void showPopupAbout(final Activity context) {
-        try {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View layout = inflater.inflate(R.layout.layout_about, (ViewGroup) findViewById(R.id.popup_1));
 
-            float popupWidth = 330*metrics.scaledDensity;
-            float popupHeight = 440*metrics.scaledDensity;
-
-            pwa = new PopupWindow(context);
-            pwa.setContentView(layout);
-            pwa.setWidth((int)popupWidth);
-            pwa.setHeight((int)popupHeight);
-            pwa.setFocusable(true);
-
-            Point p = new Point();
-            p.x = 50;
-            p.y = 50;
-
-            int OFFSET_X = -50;
-            int OFFSET_Y = (int)(80*metrics.scaledDensity);
-
-
-            pwa.showAtLocation(layout, Gravity.TOP, p.x + OFFSET_X, p.y + OFFSET_Y);
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
 
 
@@ -844,10 +855,21 @@ public class WordsActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+
         if (id == R.id.action_save) {
 
             ExportDatabaseCSVTask taskExportDatabaseCSVTask = new ExportDatabaseCSVTask();
             taskExportDatabaseCSVTask.execute();
+
+            return true;
+        }
+
+        if (id == R.id.action_help) {
+
+            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.action_help_message), Toast.LENGTH_LONG);
+            TextView vv = (TextView) toast.getView().findViewById(android.R.id.message);
+            if( vv != null) vv.setGravity(Gravity.CENTER);
+            toast.show();
 
             return true;
         }
@@ -858,9 +880,22 @@ public class WordsActivity extends ListActivity {
             return true;
         }
         if (id == R.id.action_rate) {
-            Toast.makeText(getApplicationContext(),"Rate is not active",Toast.LENGTH_LONG).show();
-            return true;
+
+            Uri uri = Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            // To count with Play market backstack, After pressing back button,
+            // to taken back to our application, we need to add following flags to intent.
+            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + getApplicationContext().getPackageName())));
+            }            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 

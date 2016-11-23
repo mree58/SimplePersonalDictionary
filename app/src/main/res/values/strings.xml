@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">Simple Personal Dictionary</string>
 
+    <string name="action_save">Export to Excel &amp; CSV</string>
+    <string name="action_help">Help</string>
     <string name="action_about">About</string>
     <string name="action_rate">Rate App</string>
-    <string name="action_save">Export to Excel &amp; CSV</string>
+
+    <string name="action_help_message">Click word to edit them !\nYou can find your saved documents on Storage/Simple Personal Dictionary folder !</string>
 
     <string name="about_title_simplepersonaldictionary">Simple Personal Dictionary</string>
     <string name="about_simplepersonaldictionary">This mobile application designed and coded by Emre Baran. Some icons and graphs have CC-BY License. Some of them are free for personal and commercial use. And a few of them are designed by me.</string>
@@ -12,9 +15,9 @@
     <string name="about_title_application">About Application</string>
     <string name="about_application">This application is open-source software. You can find the source codes on GitHub: mree58 \nFeel free to contact if you have any ideas or problems with application. Mail: emrebaran.ceng@gmail.com</string>
     <string name="about_title_permissions">About Permissions</string>
-    <string name="about_permissions">WAKE_LOCK: for alarm, let you inform about incoming birthdays</string>
-    <string name="about_application_version">Application Version:</string>
-    <string name="about_supported_languages">Supported Languages:</string>
+    <string name="about_permissions">WRITE_EXTERNAL_STORAGE: for saving your personel dictionary \nREAD_EXTERNAL_STORAGE: for exporting your personel dictionary to Excel document</string>
+    <string name="about_application_version">Application Version: 1.0.0</string>
+    <string name="about_supported_languages">Supported Languages: English, Türkçe</string>
 
     <string name="app_exit">Press Again To Exit</string>
 
@@ -29,6 +32,16 @@
     <string name="export_fail_csv">Export CSV failed !</string>
     <string name="export_succees_xls">Export Excel succeed !</string>
     <string name="export_fail_xls">Export Excel failed !</string>
-    <string name="export_sheet">Sheet1 !</string>
+    <string name="export_sheet">Sheet1</string>
+
+    <string name="delete_word">Are you sure you want to delete this word ?</string>
+    <string name="update_word">Are you sure you want to update this explanation ?</string>
+
+    <string name="update_word_succeded">Explanation is updated !</string>
+    <string name="update_word_failed">Error occurred !</string>
+
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+
 
 </resources>

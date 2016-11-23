@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Kişisel Sözlük</string>
+
+    <string name="action_save">Excel &amp; CSV Olarak Kaydet</string>
+    <string name="action_help">Yardım</string>
+    <string name="action_about">Hakkında</string>
+    <string name="action_rate">Google Play\'de Oylayın</string>
+
+    <string name="action_help_message">Kelimeleri düzenlemek için üzerine tıklayın !\nKaydettiğiniz sözlük dosyalarınızı Depolama/Simple Personal Dictionary klasöründe bulabilirsiniz !</string>
+
+    <string name="about_title_simplepersonaldictionary">Kişisel Sözlük</string>
+    <string name="about_simplepersonaldictionary">Bu mobil uygulama Emre Baran tarafından tasarlanmış ve kodlanmıştır. Bazı ikonlar ve görseller CC-BY Lisansı\'na sahiptir. Bir kısmının kişisel ve ticari kullanımı serbesttir. Az bir kısmı benim tarafımdan tasarlanmıştır.</string>
+    <string name="about_title_special_thanks">Özel Teşekkür</string>
+    <string name="about_special_thanks">Chris Leversuch : Alfabetik kaydırma örneği için teşekkürler.</string>
+    <string name="about_title_application">Uygulama Hakkında</string>
+    <string name="about_application">Bu uygulama açık-kaynak bir yazılımdır. Kaynak kodları GitHub\'da bulabilirsiniz: mree58 \nFikirlerinizi paylaşmak istiyorsanız veya uygulama ile ilgili sorun yaşıyorsanız lütfen iletişime geçin. Mail: emrebaran.ceng@gmail.com</string>
+    <string name="about_title_permissions">İzinler Hakkında</string>
+    <string name="about_permissions">WRITE_EXTERNAL_STORAGE: kişisel sözlüğünüzü kaydedebilmek için \nREAD_EXTERNAL_STORAGE: kişisel sözlüğünüzü excel dökümanı olarak hazırlayabilmek için</string>
+    <string name="about_application_version">Uygulama Versiyonu: 1.0.0</string>
+    <string name="about_supported_languages">Desteklenen Diller: English, Türkçe</string>
+
+    <string name="app_exit">Çıkmak için tekrar basın</string>
+
+    <string name="popup_edt_word">Kelime</string>
+    <string name="popup_edt_explanation">Açıklama</string>
+
+    <string name="warning_word">Kelime boş olamaz !</string>
+    <string name="warning_explanation">Açıklama boş olamaz !</string>
+
+    <string name="export_db">Veritabanı okunuyor ... !</string>
+    <string name="export_succees_csv">CSV kaydı tamamlandı !</string>
+    <string name="export_fail_csv">Hata ! CSV tamamlanamadı !</string>
+    <string name="export_succees_xls">Excel kaydı tamamlandı !</string>
+    <string name="export_fail_xls">Hata ! Excel tamamlanamadı !</string>
+    <string name="export_sheet">Sayfa1</string>
+
+    <string name="delete_word">Bu kelimeyi silmek istediğinizden emin misiniz ?</string>
+    <string name="update_word">Bu açıklamayı güncellemek istediğinizden emin misiniz ?</string>
+
+    <string name="update_word_succeded">Açıklama Güncellendi !</string>
+    <string name="update_word_failed">Hata oluştu !</string>
+
+    <string name="yes">EVET</string>
+    <string name="no">HAYIR</string>
+
+
+</resources>

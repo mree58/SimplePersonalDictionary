@@ -5,50 +5,15 @@
     <color name="colorAccent">#FF4081</color>
 
 
-
-    <color name="lightgray">#e7e7e7</color>
-    <color name="darkgray">#5F5F5F</color>
-    <color name="red">#FF0000</color>
-
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="darkgreen">#03C03C</color>
-    <color name="darkorange">#ED872D</color>
-    <color name="teal">#779ECB</color>
-    <color name="cream">#FFFBD0</color>
-
-
+    <color name="gray">#808080</color>
 
     <color name="r1">#DD1E2F</color>
     <color name="s1">#EBB035</color>
     <color name="m1">#06A2CB</color>
     <color name="g1">#218559</color>
     <color name="y1">#E9B64D</color>
-
-
-
-    <color name="red1">#DB0000</color>
-    <color name="green1">#00B655</color>
-    <color name="blue1">#006DAA</color>
-    <color name="yellow1">#FFC65D</color>
-    <color name="white1">#FFFFFF</color>
-    <color name="gray1">#808080</color>
-    <color name="turqoise1">#15B9F0</color>
-    <color name="red2">#EC1F26</color>
-
-
-    <color name="yellow">#FFFF00</color>
-    <color name="fuchsia">#FF00FF</color>
-    <color name="silver">#C0C0C0</color>
-    <color name="gray">#808080</color>
-    <color name="olive">#808000</color>
-    <color name="purple">#800080</color>
-    <color name="maroon">#800000</color>
-    <color name="aqua">#00FFFF</color>
-    <color name="lime">#00FF00</color>
-    <color name="green">#008000</color>
-    <color name="blue">#0000FF</color>
-    <color name="navy">#000080</color>
 
 
     <color name="soft_blue">#3FBDA7</color>

@@ -69,21 +69,8 @@ public class WordsDB extends SQLiteOpenHelper {
 
     }
 
-    // Getting single people
-    WordsClass getWord(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_WORDS, new String[] { KEY_ID, KEY_WORD, KEY_EXPLANATION }, KEY_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
-        if (cursor != null)
-            cursor.moveToFirst();
-
-        WordsClass contact = new WordsClass(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2));
-
-        return contact;
-    }
-
-
-    // Getting All WordsClass
+    // Getting All Words
     public List<WordsClass> getAllWords() {
         List<WordsClass> wordsList = new ArrayList<WordsClass>();
         // Select All Query Order By Days Left
@@ -131,21 +118,17 @@ public class WordsDB extends SQLiteOpenHelper {
     }
 
 
-    // Updating single people
-    public int updatePeople(WordsClass people) {
+    public int updateWord(int id, String explanation) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_WORD, people.getWord());
-        values.put(KEY_EXPLANATION, people.getExplanation());
+        values.put(KEY_EXPLANATION, explanation);
 
         // updating row
-        return db.update(TABLE_WORDS, values, KEY_ID + " = ?",
-                new String[] { String.valueOf(people.getID()) });
+        return db.update(TABLE_WORDS, values, KEY_ID + " = ?", new String[] { String.valueOf(id) });
     }
 
-
-    // Deleting single people
+    // Deleting single word
     public void deleteWord(int id) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_WORDS, KEY_ID + " = ?", new String[] { String.valueOf(id) });

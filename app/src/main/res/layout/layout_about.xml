@@ -102,61 +102,27 @@
         android:text="@string/about_permissions" />
 
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/txtView7"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="5dp">
+        android:textColor="@color/black"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:textSize="@dimen/dimen_about_text_size"
+        android:text="@string/about_application_version" />
 
-        <TextView
-            android:id="@+id/txtView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_gravity="center"
-            android:textSize="@dimen/dimen_about_text_size"
-            android:text="@string/about_application_version" />
 
-        <TextView
-            android:id="@+id/txtView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:textColor="@color/black"
-            android:layout_gravity="center"
-            android:textSize="@dimen/dimen_about_text_size"
-            android:text="1.0.0" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/txtView9"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp">
-
-        <TextView
-            android:id="@+id/txtView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:layout_gravity="center"
-            android:textSize="@dimen/dimen_about_text_size"
-            android:text="@string/about_supported_languages" />
-
-        <TextView
-            android:id="@+id/txtView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:textColor="@color/black"
-            android:layout_gravity="center"
-            android:textSize="@dimen/dimen_about_text_size"
-            android:text="English, Türkçe" />
-
-    </LinearLayout>
-
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:textSize="@dimen/dimen_about_text_size"
+        android:text="@string/about_supported_languages" />
 
 </LinearLayout>
