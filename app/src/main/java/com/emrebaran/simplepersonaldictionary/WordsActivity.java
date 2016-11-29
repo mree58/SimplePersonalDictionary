@@ -222,6 +222,10 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
         }
         else
         {
+            array_ids = new Integer[0];
+            array_words = new String[0];
+            array_explanations = new String[0];
+
             refresh(0);
         }
     }
@@ -623,7 +627,7 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
             View layout = inflater.inflate(R.layout.layout_about, (ViewGroup) findViewById(R.id.popup_1));
 
             float popupWidth = 330*metrics.scaledDensity;
-            float popupHeight = 440*metrics.scaledDensity;
+            float popupHeight = 460*metrics.scaledDensity;
 
             pwa = new PopupWindow(context);
             pwa.setContentView(layout);
@@ -858,8 +862,13 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
 
         if (id == R.id.action_save) {
 
-            ExportDatabaseCSVTask taskExportDatabaseCSVTask = new ExportDatabaseCSVTask();
-            taskExportDatabaseCSVTask.execute();
+            if(array_words.length<1)
+                Toast.makeText(getApplicationContext(),getString(R.string.warning_empty),Toast.LENGTH_SHORT).show();
+            else
+            {
+                ExportDatabaseCSVTask taskExportDatabaseCSVTask = new ExportDatabaseCSVTask();
+                taskExportDatabaseCSVTask.execute();
+            }
 
             return true;
         }

@@ -6,17 +6,17 @@
     <string name="action_about">Hakkında</string>
     <string name="action_rate">Google Play\'de Oylayın</string>
 
-    <string name="action_help_message">Kelimeleri düzenlemek için üzerine tıklayın !\nKaydettiğiniz sözlük dosyalarınızı Depolama/Simple Personal Dictionary klasöründe bulabilirsiniz !</string>
+    <string name="action_help_message">Kelimeleri düzenlemek için üzerine tıklayın !\nKaydettiğiniz sözlük dosyalarınızı \nDepolama/Simple Personal Dictionary klasöründe bulabilirsiniz !</string>
 
     <string name="about_title_simplepersonaldictionary">Kişisel Sözlük</string>
-    <string name="about_simplepersonaldictionary">Bu mobil uygulama Emre Baran tarafından tasarlanmış ve kodlanmıştır. Bazı ikonlar ve görseller CC-BY Lisansı\'na sahiptir. Bir kısmının kişisel ve ticari kullanımı serbesttir. Az bir kısmı benim tarafımdan tasarlanmıştır.</string>
+    <string name="about_simplepersonaldictionary">Bu mobil uygulama Emre Baran tarafından tasarlanmış ve kodlanmıştır. Bazı ikonlar ve görseller CC-BY Lisansı\'na sahiptir. Bir kısmının kişisel ve ticari kullanımı serbesttir. Az bir kısmı Emre Baran tarafından tasarlanmıştır.</string>
     <string name="about_title_special_thanks">Özel Teşekkür</string>
     <string name="about_special_thanks">Chris Leversuch : Alfabetik kaydırma örneği için teşekkürler.</string>
     <string name="about_title_application">Uygulama Hakkında</string>
     <string name="about_application">Bu uygulama açık-kaynak bir yazılımdır. Kaynak kodları GitHub\'da bulabilirsiniz: mree58 \nFikirlerinizi paylaşmak istiyorsanız veya uygulama ile ilgili sorun yaşıyorsanız lütfen iletişime geçin. Mail: emrebaran.ceng@gmail.com</string>
     <string name="about_title_permissions">İzinler Hakkında</string>
     <string name="about_permissions">WRITE_EXTERNAL_STORAGE: kişisel sözlüğünüzü kaydedebilmek için \nREAD_EXTERNAL_STORAGE: kişisel sözlüğünüzü excel dökümanı olarak hazırlayabilmek için</string>
-    <string name="about_application_version">Uygulama Versiyonu: 1.0.0</string>
+    <string name="about_application_version">Uygulama Versiyonu: 1.2.0</string>
     <string name="about_supported_languages">Desteklenen Diller: English, Türkçe</string>
 
     <string name="app_exit">Çıkmak için tekrar basın</string>
@@ -42,6 +42,8 @@
 
     <string name="yes">EVET</string>
     <string name="no">HAYIR</string>
+
+    <string name="warning_empty">Henüz kelime eklenmedi !</string>
 
 
 </resources>

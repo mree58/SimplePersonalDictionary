@@ -25,7 +25,9 @@
     <color name="soft_pink">#FF4081</color>
 
 
-
+    <color name="s2">#F57C00</color>
+    <color name="s3">#FF9800</color>
+    <color name="s4">#FFC107</color>
 
 
 </resources>
