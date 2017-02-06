@@ -29,5 +29,8 @@
     <color name="s3">#FF9800</color>
     <color name="s4">#FFC107</color>
 
+    <color name="dark_yellow">#E8A10E</color>
+    <color name="dialog_yellow">#FFC605</color>
+
 
 </resources>

@@ -1,40 +1,41 @@
 package com.emrebaran.simplepersonaldictionary;
 
-import android.app.Activity;
+import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -72,7 +73,7 @@ import java.util.regex.Pattern;
  * Created by mree on 10.11.2016.
  */
 
-public class WordsActivity extends AppCompatActivity {//ListActivity {
+public class WordsActivity extends AppCompatActivity implements BackupAndRestore.OnBackupListener {
 
     DisplayMetrics metrics;
 
@@ -104,6 +105,11 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
     List<Integer> controlSectionId;
 
     ListView lv;
+
+    private BackupAndRestore backupData;
+
+    String[] permissionsRequired = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
 
     class SideIndexGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
@@ -155,7 +161,7 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.layout_words_activity);
 
         array_words = new String[0];
 
@@ -171,7 +177,7 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(!contains(controlSectionId,position))
                     //Toast.makeText(getApplicationContext(),"Short: "+countries.get(position-containse(controlSectionId,position)),Toast.LENGTH_SHORT).show();
-                    showPopupEdit(WordsActivity.this,words.get(position-containse(controlSectionId,position)),position-containse(controlSectionId,position));
+                    showPopupEdit(words.get(position-containse(controlSectionId,position)),position-containse(controlSectionId,position));
 
             }
         });
@@ -182,7 +188,7 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showPopup(WordsActivity.this);
+                showPopup();
 
             }
         });
@@ -191,6 +197,10 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
         mGestureDetector = new GestureDetector(this, new WordsActivity.SideIndexGestureListener());
 
         load();
+
+
+        backupData = new BackupAndRestore(this);
+        backupData.setOnBackupListener(this);
 
     }
 
@@ -440,45 +450,36 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
 
 
 
-    private PopupWindow pw;
-    private void showPopup(final Activity context) {
+    private void showPopup() {
         try {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final View layout = inflater.inflate(R.layout.layout_popup_add_new, (ViewGroup) findViewById(R.id.popup));
 
-            float popupWidth = 350*metrics.scaledDensity;
-            float popupHeight = 200*metrics.scaledDensity;
-
-            pw = new PopupWindow(context);
-            pw.setContentView(layout);
-            pw.setWidth((int)popupWidth);
-            pw.setHeight((int)popupHeight);
-            pw.setFocusable(true);
-
-            Point p = new Point();
-            p.x = 50;
-            p.y = 50;
-
-            int OFFSET_X = -50;
-            int OFFSET_Y = (int)(90*metrics.scaledDensity);
+            final Dialog dialogAddNew = new Dialog(WordsActivity.this);
+            dialogAddNew.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogAddNew.setContentView(R.layout.layout_popup_add_new);
 
 
-            pw.showAtLocation(layout, Gravity.TOP, p.x + OFFSET_X, p.y + OFFSET_Y);
+            dialogAddNew.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wmlp = dialogAddNew.getWindow().getAttributes();
+
+            wmlp.gravity = Gravity.TOP;
+            wmlp.y = (int)(100*metrics.scaledDensity);
 
 
-            final EditText edtWord= (EditText) layout.findViewById(R.id.popup_edt_word);
-            final EditText edtExplanation= (EditText) layout.findViewById(R.id.popup_edt_explanation);
 
-            ImageButton close= (ImageButton) layout.findViewById(R.id.popup_btn_close);
+            final EditText edtWord= (EditText) dialogAddNew.findViewById(R.id.popup_edt_word);
+            final EditText edtExplanation= (EditText) dialogAddNew.findViewById(R.id.popup_edt_explanation);
+
+            ImageButton close= (ImageButton) dialogAddNew.findViewById(R.id.popup_btn_close);
             close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    pw.dismiss();
+                    dialogAddNew.dismiss();
 
                 }
             });
 
-            ImageButton save= (ImageButton) layout.findViewById(R.id.popup_btn_save);
+            ImageButton save= (ImageButton) dialogAddNew.findViewById(R.id.popup_btn_save);
             save.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -496,10 +497,12 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
 
                     load();
 
-                    pw.dismiss();
+                        dialogAddNew.dismiss();
                     }
                 }
             });
+
+            dialogAddNew.show();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -507,49 +510,40 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
     }
 
 
-    private PopupWindow pwe;
-    private void showPopupEdit(final Activity context, String selectedWord, final int selectedNo) {
+    private void showPopupEdit(String selectedWord, final int selectedNo) {
         try {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            final View layout = inflater.inflate(R.layout.layout_popup_edit, (ViewGroup) findViewById(R.id.popup));
 
-            float popupWidth = 350*metrics.scaledDensity;
-            float popupHeight = 200*metrics.scaledDensity;
-
-            pwe = new PopupWindow(context);
-            pwe.setContentView(layout);
-            pwe.setWidth((int)popupWidth);
-            pwe.setHeight((int)popupHeight);
-            pwe.setFocusable(true);
-
-            Point p = new Point();
-            p.x = 50;
-            p.y = 50;
-
-            int OFFSET_X = -50;
-            int OFFSET_Y = (int)(90*metrics.scaledDensity);
+            final Dialog dialogEdit = new Dialog(WordsActivity.this);
+            dialogEdit.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogEdit.setContentView(R.layout.layout_popup_edit);
 
 
-            pwe.showAtLocation(layout, Gravity.TOP, p.x + OFFSET_X, p.y + OFFSET_Y);
+            dialogEdit.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+            WindowManager.LayoutParams wmlp = dialogEdit.getWindow().getAttributes();
+
+            wmlp.gravity = Gravity.TOP;
+            wmlp.y = (int)(100*metrics.scaledDensity);
 
 
-            final TextView txtWord= (TextView) layout.findViewById(R.id.popup_txt_word);
-            final EditText edtExplanation= (EditText) layout.findViewById(R.id.popup_edt_explanation);
+
+            final TextView txtWord= (TextView) dialogEdit.findViewById(R.id.popup_txt_word);
+            final EditText edtExplanation= (EditText) dialogEdit.findViewById(R.id.popup_edt_explanation);
 
             txtWord.setText(selectedWord);
             edtExplanation.setText(array_explanations[selectedNo]);
 
 
-            ImageButton close= (ImageButton) layout.findViewById(R.id.popup_btn_close);
+            ImageButton close= (ImageButton) dialogEdit.findViewById(R.id.popup_btn_close);
             close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    pwe.dismiss();
+                    dialogEdit.dismiss();
 
                 }
             });
 
-            ImageButton update= (ImageButton) layout.findViewById(R.id.popup_btn_update);
+            ImageButton update= (ImageButton) dialogEdit.findViewById(R.id.popup_btn_update);
             update.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -568,7 +562,7 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
                                 if(inserted_id!=0) {
                                     Toast.makeText(getApplicationContext(), getString(R.string.update_word_succeded), Toast.LENGTH_SHORT).show();
 
-                                    pwe.dismiss();
+                                    dialogEdit.dismiss();
                                     load();
                                 }
                                 else
@@ -587,7 +581,7 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
             });
 
 
-            ImageButton delete= (ImageButton) layout.findViewById(R.id.popup_btn_delete);
+            ImageButton delete= (ImageButton) dialogEdit.findViewById(R.id.popup_btn_delete);
             delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -599,7 +593,7 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
                             db.deleteWord(array_ids[selectedNo]);
                             load();
                             dialog.dismiss();
-                            pwe.dismiss();
+                            dialogEdit.dismiss();
                         }
                     });
                     newDialog.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener(){
@@ -614,37 +608,32 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
                 }
             });
 
+            dialogEdit.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
 
-    private PopupWindow pwa;
-    private void showPopupAbout(final Activity context) {
+    private void showPopupAbout() {
         try {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View layout = inflater.inflate(R.layout.layout_about, (ViewGroup) findViewById(R.id.popup_1));
 
-            float popupWidth = 330*metrics.scaledDensity;
-            float popupHeight = 460*metrics.scaledDensity;
-
-            pwa = new PopupWindow(context);
-            pwa.setContentView(layout);
-            pwa.setWidth((int)popupWidth);
-            pwa.setHeight((int)popupHeight);
-            pwa.setFocusable(true);
-
-            Point p = new Point();
-            p.x = 50;
-            p.y = 50;
-
-            int OFFSET_X = -50;
-            int OFFSET_Y = (int)(80*metrics.scaledDensity);
+            final Dialog dialogAbout = new Dialog(WordsActivity.this);
+            dialogAbout.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialogAbout.setContentView(R.layout.layout_about);
 
 
-            pwa.showAtLocation(layout, Gravity.TOP, p.x + OFFSET_X, p.y + OFFSET_Y);
+            dialogAbout.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
+            WindowManager.LayoutParams wmlp = dialogAbout.getWindow().getAttributes();
+
+            wmlp.gravity = Gravity.TOP;
+            wmlp.y = (int)(50*metrics.scaledDensity);
+
+            dialogAbout.setCancelable(true);
+
+            dialogAbout.show();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -653,7 +642,6 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
 
 
     public class ExportDatabaseCSVTask extends AsyncTask<String, Void, Boolean>
-
     {
 
         private final ProgressDialog dialog = new ProgressDialog(WordsActivity.this);
@@ -669,7 +657,7 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
         protected Boolean doInBackground(final String... args)
         {
             WordsDB dbWords = new WordsDB(WordsActivity.this) ;
-            File exportDir = new File(Environment.getExternalStorageDirectory(), "/Simple Personal Dictionary/");
+            File exportDir = new File(Environment.getExternalStorageDirectory(), "/Personal Dictionary/");
 
             if (!exportDir.exists())
 
@@ -728,8 +716,8 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
         }}
 
 
-
-    public class CSVToExcelConverter extends AsyncTask<String, Void, Boolean> {
+    public class CSVToExcelConverter extends AsyncTask<String, Void, Boolean>
+    {
 
         private final ProgressDialog dialog = new ProgressDialog(WordsActivity.this);
 
@@ -751,8 +739,8 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
             ArrayList al=null;
 
 
-            String inFilePath = Environment.getExternalStorageDirectory().toString()+"/Simple Personal Dictionary/"+csvName+".csv";
-            String outFilePath = Environment.getExternalStorageDirectory().toString()+"/Simple Personal Dictionary/"+csvName+".xls";
+            String inFilePath = Environment.getExternalStorageDirectory().toString()+"/Personal Dictionary/"+csvName+".csv";
+            String outFilePath = Environment.getExternalStorageDirectory().toString()+"/Personal Dictionary/"+csvName+".xls";
             String thisLine;
             int count=0;
 
@@ -842,7 +830,24 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
     }
 
 
+    @Override
+    public void onFinishExport(String error) {
+        String notify = error;
+        if (error == null) {
+            notify = getString(R.string.backup_export_success);
+        }
+        Toast.makeText(getApplicationContext(), notify, Toast.LENGTH_SHORT).show();
+    }
 
+    @Override
+    public void onFinishImport(String error) {
+        String notify = error;
+        if (error == null) {
+            notify = getString(R.string.backup_import_success);
+            load();
+        }
+        Toast.makeText(getApplicationContext(), notify, Toast.LENGTH_SHORT).show();
+    }
 
 
 
@@ -860,20 +865,50 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
         int id = item.getItemId();
 
 
+
         if (id == R.id.action_save) {
 
             if(array_words.length<1)
                 Toast.makeText(getApplicationContext(),getString(R.string.warning_empty),Toast.LENGTH_SHORT).show();
             else
             {
-                ExportDatabaseCSVTask taskExportDatabaseCSVTask = new ExportDatabaseCSVTask();
-                taskExportDatabaseCSVTask.execute();
+                if(ActivityCompat.checkSelfPermission(getApplicationContext(), permissionsRequired[0]) != PackageManager.PERMISSION_GRANTED
+                        || ActivityCompat.checkSelfPermission(getApplicationContext(), permissionsRequired[1]) != PackageManager.PERMISSION_GRANTED) {
+
+                    Intent myIntent = new Intent(WordsActivity.this,PermissionsActivity.class);
+                    startActivity(myIntent);
+                }
+                else {
+                    ExportDatabaseCSVTask taskExportDatabaseCSVTask = new ExportDatabaseCSVTask();
+                    taskExportDatabaseCSVTask.execute();
+                }
             }
 
             return true;
         }
 
-        if (id == R.id.action_help) {
+        else if (id == R.id.action_share) {
+
+            Toast.makeText(getApplicationContext(),getString(R.string.share),Toast.LENGTH_SHORT).show();
+
+            return true;
+        }
+
+        else if (id == R.id.action_backup) {
+
+            if(ActivityCompat.checkSelfPermission(getApplicationContext(), permissionsRequired[0]) != PackageManager.PERMISSION_GRANTED
+                    || ActivityCompat.checkSelfPermission(getApplicationContext(), permissionsRequired[1]) != PackageManager.PERMISSION_GRANTED) {
+
+                Intent myIntent = new Intent(WordsActivity.this,PermissionsActivity.class);
+                startActivity(myIntent);
+            }
+            else
+            backUpQuestion();
+
+            return true;
+        }
+
+        else if (id == R.id.action_help) {
 
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.action_help_message), Toast.LENGTH_LONG);
             TextView vv = (TextView) toast.getView().findViewById(android.R.id.message);
@@ -883,12 +918,12 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
             return true;
         }
 
-        if (id == R.id.action_about) {
-            showPopupAbout(WordsActivity.this);
+        else if (id == R.id.action_about) {
+            showPopupAbout();
 
             return true;
         }
-        if (id == R.id.action_rate) {
+        else if (id == R.id.action_rate) {
 
             Uri uri = Uri.parse("market://details?id=" + getApplicationContext().getPackageName());
             Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
@@ -907,6 +942,35 @@ public class WordsActivity extends AppCompatActivity {//ListActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    private void backUpQuestion() {
+        android.support.v7.app.AlertDialog.Builder newDialog = new android.support.v7.app.AlertDialog.Builder(WordsActivity.this);
+        newDialog.setMessage(getString(R.string.backup_question));
+        newDialog.setPositiveButton(getString(R.string.exportDb), new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int which){
+
+                if(db.getRowCount()>0)
+                    backupData.exportToSD();
+                else
+                    Toast.makeText(getApplicationContext(),getString(R.string.export_warning),Toast.LENGTH_SHORT).show();
+
+                dialog.dismiss();
+
+            }
+        });
+        newDialog.setNegativeButton(getString(R.string.importDb), new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int which){
+
+                backupData.importFromSD();
+
+                dialog.cancel();
+            }
+        });
+        newDialog.show();
+    }
+
 
 
     //double click to exit

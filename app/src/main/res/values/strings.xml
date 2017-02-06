@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_name">Simple Personal Dictionary</string>
+    <string name="app_name">Personal Dictionary</string>
 
     <string name="action_save">Export to Excel &amp; CSV</string>
+    <string name="action_share">Share Your Dictionary</string>
+    <string name="action_backup">Backup &amp; Restore</string>
     <string name="action_help">Help</string>
     <string name="action_about">About</string>
     <string name="action_rate">Rate App</string>
@@ -45,6 +47,34 @@
 
     <string name="warning_empty">No Word Added Yet !</string>
 
+    <string name="exportDb">Backup</string>
+    <string name="importDb">Restore</string>
 
+    <string name="export_warning">There is no data to backup !</string>
+
+    <string name="backup_question">Restoring may you lose current data and alarms !</string>
+    <string name="backup_before_import">Do you want backup current database before import an old one ?</string>
+    <string name="backup_current_file">Backup Current Database</string>
+    <string name="backup_select_file">Select Backup File</string>
+    <string name="backup_empty">Backup file is empty !</string>
+    <string name="backup_import_error">Error import !</string>
+    <string name="backup_export_error">Error backup !</string>
+    <string name="backup_load_error">Error load file !</string>
+    <string name="backup_importing_dialog">Importing ...</string>
+    <string name="backup_import_success">Restore succeeded</string>
+    <string name="backup_export_success">Backup succeeded</string>
+
+
+    <string name="share">Share will be available on next update !</string>
+
+
+    <string name="permissions_management">Permissions Management</string>
+
+    <string name="permissions_title">Need Permissions !</string>
+    <string name="permissions_message">This app needs Storage permissions for exporting words to excel and backing up database.</string>
+    <string name="permissions_grant">Grant</string>
+    <string name="permissions_cancel">Cancel</string>
+    <string name="permissions_goto">Go to Permissions to Grant Storage</string>
+    <string name="permissions_unable">Unable to get Permission</string>
 
 </resources>

@@ -2,6 +2,8 @@
     <string name="app_name">Kişisel Sözlük</string>
 
     <string name="action_save">Excel &amp; CSV Olarak Kaydet</string>
+    <string name="action_share">Sözlüğü Paylaş</string>
+    <string name="action_backup">Yedekle &amp; Geri Yükle</string>
     <string name="action_help">Yardım</string>
     <string name="action_about">Hakkında</string>
     <string name="action_rate">Google Play\'de Oylayın</string>
@@ -45,5 +47,33 @@
 
     <string name="warning_empty">Henüz kelime eklenmedi !</string>
 
+    <string name="exportDb">Yedekle</string>
+    <string name="importDb">Geri Yükle</string>
+
+    <string name="export_warning">Yedeklenecek veri yok !</string>
+
+    <string name="backup_question">Geri yükleme işlemi şu anki datalarınızın ve alarmlarınızın kaybolmasına yol açabilir !</string>
+    <string name="backup_before_import">Eski bir veritabanı geri yüklemesinden önce geçerli verilerinizi yedeklemek ister misiniz ?</string>
+    <string name="backup_current_file">Mevcut Veritabanını Yedekle</string>
+    <string name="backup_select_file">Yedek Dosyası Seçin</string>
+    <string name="backup_empty">Yedek dosya bulunamadı !</string>
+    <string name="backup_import_error">Hata: Geri yükleme !</string>
+    <string name="backup_export_error">Hata: Yedekleme !</string>
+    <string name="backup_load_error">Hata: Dosya yüklenemedi !</string>
+    <string name="backup_importing_dialog">İçe aktarılıyor ...</string>
+    <string name="backup_import_success">Geri yükleme başarılı oldu</string>
+    <string name="backup_export_success">Yedekleme başarılı oldu</string>
+
+
+    <string name="share">Paylaşım sonraki güncellemede aktif olacak !</string>
+
+    <string name="permissions_management">İzin Yönetimi</string>
+
+    <string name="permissions_title">İzinler Gerekli !</string>
+    <string name="permissions_message">Bu uygulama sözlüğü excele aktarabilmek ve veritabanı yedeklemesi için Depolama iznine ihtiyaç duymaktadır.</string>
+    <string name="permissions_grant">İzin Ver</string>
+    <string name="permissions_cancel">İptal</string>
+    <string name="permissions_goto">Depolamaya izin vermek için izin ayarlarına gidin</string>
+    <string name="permissions_unable">İzin alınamadı !</string>
 
 </resources>

@@ -17,7 +17,7 @@ public class WordsDB extends SQLiteOpenHelper {
 
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "dbWords";
+    public static final String DATABASE_NAME = "dbWords";
     public static final String TABLE_WORDS = "tbWords";
 
     //Table Columns names
@@ -135,5 +135,45 @@ public class WordsDB extends SQLiteOpenHelper {
         db.close();
     }
 
+
+    public WordsClass cursorToNote(Cursor cursor) {
+
+        WordsClass w = new WordsClass();
+
+        w.setID(cursor.getInt(cursor.getColumnIndex(KEY_ID)));
+        w.setWord(cursor.getString(cursor.getColumnIndex(KEY_WORD)));
+        w.setExplanation(cursor.getString(cursor.getColumnIndex(KEY_EXPLANATION)));
+
+        return w;
+    }
+
+    public long insertNote(WordsClass w) {
+        return insert(TABLE_WORDS, noteToValues(w));
+    }
+    public long insert(String table, ContentValues values) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long index = db.insert(table, null, values);
+        db.close();
+        return index;
+    }
+
+    private ContentValues noteToValues(WordsClass w) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_WORD, w.getWord());
+        values.put(KEY_EXPLANATION, w.getExplanation());
+
+        return values;
+    }
+
+
+    public boolean deleteNote(String where) {
+        return delete(TABLE_WORDS, where);
+    }
+    public boolean delete(String table, String where) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long index = db.delete(table, where, null);
+        db.close();
+        return index > 0;
+    }
 
 }

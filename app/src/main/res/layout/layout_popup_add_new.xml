@@ -14,7 +14,12 @@
 			android:id="@+id/popup_edt_word"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:textColor="@color/white"
 			android:ems="10"
+			android:textIsSelectable="false"
+			android:inputType="text"
+			android:focusable="true"
+			android:enabled="true"
 			android:hint="@string/popup_edt_word" >
 
 			<requestFocus />
@@ -32,8 +37,12 @@
 			android:id="@+id/popup_edt_explanation"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:textColor="@color/white"
 			android:inputType="textMultiLine"
 			android:ems="10"
+			android:textIsSelectable="false"
+			android:focusable="true"
+			android:enabled="true"
 			android:layout_weight="1"
 			android:hint="@string/popup_edt_explanation"
 			/>

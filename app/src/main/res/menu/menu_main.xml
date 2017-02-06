@@ -10,20 +10,32 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_help"
+        android:id="@+id/action_share"
         android:orderInCategory="2"
+        android:title="@string/action_share"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_backup"
+        android:orderInCategory="3"
+        android:title="@string/action_backup"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_help"
+        android:orderInCategory="4"
         android:title="@string/action_help"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_about"
-        android:orderInCategory="3"
+        android:orderInCategory="5"
         android:title="@string/action_about"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_rate"
-        android:orderInCategory="4"
+        android:orderInCategory="6"
         android:title="@string/action_rate"
         app:showAsAction="never" />
 </menu>
